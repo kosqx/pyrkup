@@ -9,6 +9,19 @@ class Node(object):
         self.attr = attr
         self.data = data
 
+    def __repr__(self):
+        return 'Node(kind=%r, attr=%r, data=%r)' % (
+            self.kind, self.attr, self.data
+        )
+
+    def __cmp__(self, other):
+        if not isinstance(other, Node):
+            raise TypeError
+        return cmp(
+            (self.kind, self.attr, self.data),
+            (other.kind, other.attr, other.data)
+        )
+
 
 class Markup(object):
     def auto_format(self, node):
