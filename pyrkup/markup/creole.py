@@ -33,7 +33,6 @@ def creole_parse(text):
 def build_tree(seq):
     stack = [Node(None, None, [])]
     for op, value in seq:
-        print stack
         if op in ('text', 'put'):
             stack[-1].data.append(value)
         elif op == 'start':
@@ -43,12 +42,6 @@ def build_tree(seq):
         elif op == 'stop':
             stack.pop()
     return stack[0].data
-
-
-creole_parse_result = creole_parse(u'foo**bar**')
-assert creole_parse_result == [('text', u'foo'), ('start', 'bold'), ('text', u'bar'), ('stop', 'bold')]
-build_tree = build_tree(creole_parse_result)
-assert build_tree == [u'foo', Node(kind='bold', attr=None, data=[u'bar'])]
 
 
 class CreoleMarkup(Markup):
