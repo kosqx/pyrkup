@@ -23,6 +23,28 @@ class Node(object):
         )
 
 
+class NodeKind(object):
+    PARAGRAPH = 'para'
+    HEADER = 'header'
+    RAW = 'raw'
+
+    TABLE = 'table'
+    TABLE_ROW = 'row'
+    TABLE_CELL = 'cell'
+
+    LINK = 'link'
+    IMAGE = 'image'
+
+    BOLD = 'bold'
+    ITALIC = 'italic'
+    MONOSPACE = 'mono'
+    SUBSCRIPT = 'sub'
+    SUPERSCRIPT = 'super'
+    UNDERLINE = 'under'
+    STRIKETHROUGH = 'strike'
+    NEWLINE = 'newline'
+
+
 class Markup(object):
     def auto_format(self, node):
         if isinstance(node, str):
