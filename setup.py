@@ -14,6 +14,13 @@ from setuptools.command.test import test as TestCommand
 import pyrkup
 
 
+def read(filename):
+    fin = open(filename)
+    data = fin.read()
+    fin.close()
+    return unicode(data, 'utf-8')
+
+
 class PyTest(TestCommand):
     def finalize_options(self):
         TestCommand.finalize_options(self)
@@ -37,7 +44,7 @@ setup(
     cmdclass={'test': PyTest},
     author_email='krzysztof.kosyl@gmail.com',
     description='Converter between multiple markup formats',
-    long_description='Converter between multiple markup formats',
+    long_description=read('README.rst'),
     packages=['pyrkup'],
     include_package_data=True,
     platforms='any',
@@ -55,7 +62,7 @@ setup(
         'Topic :: Internet :: WWW/HTTP :: Dynamic Content',
         'Topic :: Text Processing :: Markup',
         'Topic :: Text Processing :: Markup :: HTML',
-        ],
+    ],
     extras_require={
         'testing': ['pytest'],
     }
