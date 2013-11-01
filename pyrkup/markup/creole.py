@@ -7,20 +7,13 @@ from pyrkup.core import Node, Markup
 
 
 class CreoleMarkup(Markup):
+    auto_format_table = {
+        'para': (u'', u'\n\n'),
+        'bold': (u'**', u'**'),
+    }
+
     def format(self, node):
-        if isinstance(node, str):
-            return unicode(node, 'utf-8')
-        elif isinstance(node, unicode):
-            return node
-        elif isinstance(node, Node):
-            if node.kind == 'para':
-                return u''.join(self.format(i) for i in node.data) + u'\n\n'
-            elif node.kind == 'bold':
-                return u'**' + u''.join(self.format(i) for i in node.data) + u'**'
-            else:
-                raise ValueError('unsupported node kind: %r' % node.kind)
-        else:
-            raise TypeError('unsupported node type: %r' % type(node))
+        return self.auto_format(node)
 
     def parse(self, text):
         pass
