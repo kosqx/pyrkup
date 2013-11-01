@@ -3,6 +3,9 @@
 from __future__ import with_statement, division, absolute_import
 
 
+import pytest
+
+
 from pyrkup.core import Node
 
 from pyrkup.markup.creole import CreoleMarkup
@@ -17,12 +20,11 @@ data = Node('para', None, [
 ])
 
 
-def main():
+def test_html_format():
     html = HtmlMarkup()
     assert html.format(data) == u'<p>foo<b>bar</b></p>'
+
+
+def test_creole_format():
     creole = CreoleMarkup()
     assert creole.format(data) == u'foo**bar**\n\n'
-
-
-if __name__ == '__main__':
-    main()
