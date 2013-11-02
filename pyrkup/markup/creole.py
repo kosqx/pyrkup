@@ -61,6 +61,46 @@ def creole_format_link(node):
         return '[[%s|%s]]' % (node.attr['address'], node.data[0])
 
 
+regexp = lambda pattern: re.compile('^' + pattern)
+toplevel_table = [
+    ('header', regexp(r'={1,5} '), False),
+    ('unordered', regexp(r'\s*\*{1,5} '), True),
+    ('ordered', regexp(r'\s*#{1,5} '), True),
+    ('quote', regexp(r'>+ '), True),
+    ('hr', regexp(r'\s*-{4,}\s?$'), False),
+    ('table', regexp(r'\|'), False),
+
+    ('empty', regexp(r'\s*$'), False),
+]
+
+
+def toplevel(text):
+    def find(line):
+        for name, regex, multiline in toplevel_table:
+            m = regex.match(line)
+            if m:
+                return name, multiline, m.group(), line[len(m.group()):]
+        return 'text', True, '', line
+
+    result = []
+    multi = False
+    for line in text.splitlines():
+        print find(line)
+        name, multiline, prefix, data = find(line)
+        if name == 'text' and not multi:
+            result.append(['text', '', data])
+        elif name == 'text':
+            result[-1].append(data)
+        else:
+            result.append([name, prefix, data])
+        multi = multiline
+
+    for i in result:
+        print i
+
+    return result
+
+
 class CreoleMarkup(Markup):
     auto_format_table = {
         NodeKind.PARAGRAPH: (u'', u'\n\n'),

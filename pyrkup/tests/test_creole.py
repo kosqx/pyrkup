@@ -7,7 +7,7 @@ import pytest
 
 
 from pyrkup.core import Node, NodeKind
-from pyrkup.markup.creole import CreoleMarkup
+from pyrkup.markup.creole import CreoleMarkup, toplevel
 
 
 def v(kind):
@@ -44,3 +44,35 @@ def test_format(text, nodes):
     print CreoleMarkup().format(nodes)
     print text
     assert CreoleMarkup().format(nodes) == text
+
+def test_toplevel():
+    assert toplevel('''
+= foo
+
+* a
+** aa
+* b
+** ba
+additional line
+** bb
+
+== title
+normal text
+
+foo bar
+baz quux
+''') == [
+        ['empty', '', ''],
+        ['header', '= ', 'foo'],
+        ['empty', '', ''],
+        ['unordered', '* ', 'a'],
+        ['unordered', '** ', 'aa'],
+        ['unordered', '* ', 'b'],
+        ['unordered', '** ', 'ba', 'additional line'],
+        ['unordered', '** ', 'bb'],
+        ['empty', '', ''],
+        ['header', '== ', 'title'],
+        ['text', '', 'normal text'],
+        ['empty', '', ''],
+        ['text', '', 'foo bar', 'baz quux'],
+    ]
