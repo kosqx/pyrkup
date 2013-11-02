@@ -52,15 +52,15 @@ class Markup(object):
         elif isinstance(node, unicode):
             return node
         elif isinstance(node, list):
-            return u''.join(self.format(i) for i in node)
+            return u''.join(self.auto_format(i) for i in node)
         elif isinstance(node, Node):
             formatter = self.auto_format_table.get(node.kind)
             if callable(formatter):
                 return formatter(node)
             if isinstance(formatter, tuple) and len(formatter) == 2:
                 return formatter[0] + self.auto_format(node.data) + formatter[1]
-            elif isinstance(formatter, basestring):
-                self.auto_format(formatter)
+            elif isinstance(formatter, unicode):
+                return formatter
             else:
                 raise ValueError('unsupported node kind: %r' % node.kind)
         else:
