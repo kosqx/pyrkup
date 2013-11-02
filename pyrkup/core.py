@@ -25,8 +25,14 @@ class Node(object):
 
 class NodeKind(object):
     PARAGRAPH = 'para'
+    BLOCKQUOTE = 'blockquote'
     HEADER = 'header'
     RAW = 'raw'
+
+    ORDERED_LIST = 'ol'
+    UNORDERED_LIST = 'ul'
+    DEFINITION_TERM = 'dt'
+    DEFINITION_DESCRIPTION = 'dd'
 
     TABLE = 'table'
     TABLE_ROW = 'row'
