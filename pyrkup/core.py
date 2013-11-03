@@ -20,15 +20,15 @@ class Node(object):
     def __cmp__(self, other):
         if not isinstance(other, Node):
             raise TypeError
-        return cmp(
-            (self.kind, self.attr, self.data),
-            (other.kind, other.attr, other.data)
-        )
+        return cmp(self.to_tuple(), other.to_tuple())
 
     def __eq__(self, other):
         if not isinstance(other, Node):
             raise TypeError
-        return ((self.kind, self.attr, self.data) == (other.kind, other.attr, other.data))
+        return self.to_tuple() == other.to_tuple()
+
+    def to_tuple(self):
+        return (self.kind, self.attr, self.data)
 
 
 class NodeKind(object):
