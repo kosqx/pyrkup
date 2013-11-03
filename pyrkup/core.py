@@ -28,9 +28,13 @@ class NodeKind(object):
     BLOCKQUOTE = 'blockquote'
     HEADER = 'header'
     RAW = 'raw'
+    HORIZONTAL_RULE = 'hr'
 
     ORDERED_LIST = 'ol'
     UNORDERED_LIST = 'ul'
+    LIST_ITEM = 'li'
+
+    DEFINITION_LIST = 'dl'
     DEFINITION_TERM = 'dt'
     DEFINITION_DESCRIPTION = 'dd'
 
@@ -61,8 +65,10 @@ class Markup(object):
             return u''.join(self.auto_format(i) for i in node)
         elif isinstance(node, Node):
             formatter = self.auto_format_table.get(node.kind)
+
             if callable(formatter):
-                return formatter(node)
+                formatter = formatter(node)
+
             if isinstance(formatter, tuple) and len(formatter) == 2:
                 return formatter[0] + self.auto_format(node.data) + formatter[1]
             elif isinstance(formatter, unicode):
