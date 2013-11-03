@@ -3,6 +3,12 @@
 from __future__ import with_statement, division, absolute_import, print_function
 
 
+try:
+    from html.parser import HTMLParser
+except ImportError:
+    from HTMLParser import HTMLParser
+
+
 from pyrkup.core import Node, NodeKind, Markup
 
 
@@ -12,6 +18,73 @@ from pyrkup.core import Node, NodeKind, Markup
 # - extensions
 # - img @height, @width, @alt (stripped of tags)
 # - table: @align, @colspan
+
+
+def parse_link(tag, attrs):
+    return Node(NodeKind.LINK, {'address': dict(attrs)['href']}, [])
+
+def parse_image(tag, attrs):
+    return Node(NodeKind.IMAGE, {'address': dict(attrs)['src']}, [dict(attrs).get('alt')])
+
+def parse_header(tag, attrs):
+    return Node(NodeKind.HEADER, {'level': int(tag[-1])}, [])
+
+
+TAG_TO_KIND = {
+    'p': (NodeKind.PARAGRAPH, True),
+    'blockquote': (NodeKind.BLOCKQUOTE, True),
+    'pre': (NodeKind.RAW, True),
+    'hr': (NodeKind.HORIZONTAL_RULE, False),
+
+    'h1': (NodeKind.HEADER, parse_header),
+    'h2': (NodeKind.HEADER, parse_header),
+    'h3': (NodeKind.HEADER, parse_header),
+    'h4': (NodeKind.HEADER, parse_header),
+    'h5': (NodeKind.HEADER, parse_header),
+    'h6': (NodeKind.HEADER, parse_header),
+
+    'ol': (NodeKind.ORDERED_LIST, True),
+    'ul': (NodeKind.UNORDERED_LIST, True),
+    'li': (NodeKind.LIST_ITEM, True),
+
+    'dl': (NodeKind.DEFINITION_LIST, True),
+    'dt': (NodeKind.DEFINITION_TERM, True),
+    'dd': (NodeKind.DEFINITION_DESCRIPTION, True),
+
+    'table': (NodeKind.TABLE, True),
+    'tr': (NodeKind.TABLE_ROW, True),
+    'td': (NodeKind.TABLE_CELL, True),
+
+    'a': (NodeKind.LINK, parse_link),
+    'img': (NodeKind.IMAGE, parse_image),
+
+    'strong': (NodeKind.BOLD, True),
+    'em': (NodeKind.ITALIC, True),
+    'tt': (NodeKind.MONOSPACE, True),
+    'sub': (NodeKind.SUBSCRIPT, True),
+    'sup': (NodeKind.SUPERSCRIPT, True),
+    'u': (NodeKind.UNDERLINE, True),
+    'strike': (NodeKind.STRIKETHROUGH, True),
+    'br': (NodeKind.NEWLINE, False),
+}
+
+
+class PyrkupHtmlParser(HTMLParser):
+    def handle_starttag(self, tag, attrs):
+        if tag in TAG_TO_KIND:
+            kind, func = TAG_TO_KIND[tag]
+            if callable(func):
+                new = func(tag, attrs)
+            else:
+                new = Node(kind, None, [] if func else None)
+        else:
+            new = Node(tag, None, [])
+        self.stack[-1].data.append(new)
+        self.stack.append(new)
+    def handle_endtag(self, tag):
+        self.stack.pop()
+    def handle_data(self, data):
+        self.stack[-1].data.append(data)
 
 
 class HtmlMarkup(Markup):
@@ -51,4 +124,7 @@ class HtmlMarkup(Markup):
         return self.auto_format(node)
 
     def parse(self, text):
-        pass
+        parser = PyrkupHtmlParser()
+        parser.stack = [Node(None, {}, [])]
+        parser.feed(text)
+        return parser.stack[0].data

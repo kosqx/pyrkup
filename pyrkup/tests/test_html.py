@@ -75,7 +75,7 @@ DATA = [
     (u'foo <blockquote>bar</blockquote> baz', v(NodeKind.BLOCKQUOTE)),
     (u'foo <h1>bar</h1> baz', [u'foo ', Node(NodeKind.HEADER, {'level': 1}, [u'bar']), u' baz']),
     (u'foo <pre>bar</pre> baz', v(NodeKind.RAW)),
-    (u'foo <hr /> baz', v(NodeKind.HORIZONTAL_RULE)),
+    (u'foo <hr /> baz', [u'foo ', Node(NodeKind.HORIZONTAL_RULE), u' baz']),
 
     (DATA_ORDERED_HTML, DATA_ORDERED_NODES),
     (DATA_UNORDERED_HTML, DATA_UNORDERED_NODES),
@@ -99,11 +99,11 @@ DATA = [
 ]
 
 
-# @pytest.mark.parametrize(('text', 'nodes'), DATA)
-# def test_parse(text, nodes):
-#     print HtmlMarkup().parse(text)
-#     print nodes
-#     assert HtmlMarkup().parse(text) == nodes
+@pytest.mark.parametrize(('text', 'nodes'), DATA)
+def test_parse(text, nodes):
+    print(HtmlMarkup().parse(text))
+    print(nodes)
+    assert HtmlMarkup().parse(text) == nodes
 
 
 @pytest.mark.parametrize(('text', 'nodes'), DATA)
