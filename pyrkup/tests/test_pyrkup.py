@@ -24,7 +24,7 @@ data = Node('para', None, [
 
 def test_html_format():
     html = HtmlMarkup()
-    assert html.format(data) == u'<p>foo<b>bar</b></p>'
+    assert html.format(data) == u'<p>foo<strong>bar</strong></p>'
 
 
 def test_creole_format():
@@ -35,29 +35,29 @@ def test_creole_format():
 def test_creole_parse():
     creole = CreoleMarkup()
     assert creole.parse(u'foo**bar**') == [
-	    u'foo',
-	    Node('bold', None, [
-	        u'bar',
-	    ])
+        u'foo',
+        Node('bold', None, [
+            u'bar',
+        ])
     ]
 
 
 creole_parse_result = [
-	('text', u'foo'),
-	('start', 'bold'),
-	('text', u'bar'),
-	('stop', 'bold'),
+    ('text', u'foo'),
+    ('start', 'bold'),
+    ('text', u'bar'),
+    ('stop', 'bold'),
 ]
 
 
 def test_creole_parse_fn():
-	result = creole_parse(u'foo**bar**')
-	assert result == creole_parse_result
+    result = creole_parse(u'foo**bar**')
+    assert result == creole_parse_result
 
 
 def test_build_tree_fn():
-	result = build_tree(creole_parse_result)
-	assert result == [
-		u'foo',
-		Node(kind='bold', attr=None, data=[u'bar'])
-	]
+    result = build_tree(creole_parse_result)
+    assert result == [
+        u'foo',
+        Node(kind='bold', attr=None, data=[u'bar'])
+    ]
