@@ -15,10 +15,9 @@ import pyrkup
 
 
 def read(filename):
-    fin = open(filename)
-    data = fin.read()
-    fin.close()
-    return unicode(data, 'utf-8')
+    with io.open(filename, encoding='utf-8') as f:
+        data = f.read()
+    return data
 
 
 class PyTest(TestCommand):

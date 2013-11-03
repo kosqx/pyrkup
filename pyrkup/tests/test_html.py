@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-from __future__ import with_statement, division, absolute_import
+from __future__ import with_statement, division, absolute_import, print_function
 
 
 import pytest
@@ -108,6 +108,6 @@ DATA = [
 
 @pytest.mark.parametrize(('text', 'nodes'), DATA)
 def test_format(text, nodes):
-    print HtmlMarkup().format(nodes)
-    print text
+    print(HtmlMarkup().format(nodes))
+    print(text)
     assert HtmlMarkup().format(nodes) == text

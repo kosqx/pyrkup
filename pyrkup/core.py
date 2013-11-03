@@ -1,6 +1,9 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-from __future__ import with_statement, division, absolute_import
+from __future__ import with_statement, division, absolute_import, print_function
+
+
+from pyrkup import five
 
 
 class Node(object):
@@ -21,6 +24,11 @@ class Node(object):
             (self.kind, self.attr, self.data),
             (other.kind, other.attr, other.data)
         )
+
+    def __eq__(self, other):
+        if not isinstance(other, Node):
+            raise TypeError
+        return ((self.kind, self.attr, self.data) == (other.kind, other.attr, other.data))
 
 
 class NodeKind(object):
@@ -57,10 +65,8 @@ class NodeKind(object):
 
 class Markup(object):
     def auto_format(self, node):
-        if isinstance(node, str):
-            return unicode(node, 'utf-8')
-        elif isinstance(node, unicode):
-            return node
+        if isinstance(node, five.string_types):
+            return five.force_unicode(node)
         elif isinstance(node, list):
             return u''.join(self.auto_format(i) for i in node)
         elif isinstance(node, Node):
@@ -71,8 +77,8 @@ class Markup(object):
 
             if isinstance(formatter, tuple) and len(formatter) == 2:
                 return formatter[0] + self.auto_format(node.data) + formatter[1]
-            elif isinstance(formatter, unicode):
-                return formatter
+            elif isinstance(formatter, five.string_types):
+                return five.force_unicode(formatter)
             else:
                 raise ValueError('unsupported node kind: %r' % node.kind)
         else:

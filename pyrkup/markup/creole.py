@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-from __future__ import with_statement, division, absolute_import
+from __future__ import with_statement, division, absolute_import, print_function
 
 
 import re
@@ -85,7 +85,7 @@ def toplevel(text):
     result = []
     multi = False
     for line in text.splitlines():
-        print find(line)
+        print(find(line))
         name, multiline, prefix, data = find(line)
         if name == 'text' and not multi:
             result.append(['text', '', data])
@@ -96,7 +96,7 @@ def toplevel(text):
         multi = multiline
 
     for i in result:
-        print i
+        print(i)
 
     return result
 

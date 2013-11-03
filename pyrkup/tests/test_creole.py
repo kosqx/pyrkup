@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-from __future__ import with_statement, division, absolute_import
+from __future__ import with_statement, division, absolute_import, print_function
 
 
 import pytest
@@ -34,15 +34,15 @@ DATA = [
 
 @pytest.mark.parametrize(('text', 'nodes'), DATA)
 def test_parse(text, nodes):
-    print CreoleMarkup().parse(text)
-    print nodes
+    print(CreoleMarkup().parse(text))
+    print(nodes)
     assert CreoleMarkup().parse(text) == nodes
 
 
 @pytest.mark.parametrize(('text', 'nodes'), DATA)
 def test_format(text, nodes):
-    print CreoleMarkup().format(nodes)
-    print text
+    print(CreoleMarkup().format(nodes))
+    print(text)
     assert CreoleMarkup().format(nodes) == text
 
 def test_toplevel():
