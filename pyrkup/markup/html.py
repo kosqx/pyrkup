@@ -5,10 +5,10 @@ from __future__ import with_statement, division, absolute_import, print_function
 
 try:
     from html.parser import HTMLParser
-    from html.entities  import name2codepoint
+    from html.entities import name2codepoint
 except ImportError:
     from HTMLParser import HTMLParser
-    from htmlentitydefs  import name2codepoint
+    from htmlentitydefs import name2codepoint
 
 
 from pyrkup import five
@@ -26,8 +26,10 @@ from pyrkup.core import Node, NodeKind, Markup
 def parse_link(tag, attrs):
     return Node(NodeKind.LINK, {'address': dict(attrs)['href']}, [])
 
+
 def parse_image(tag, attrs):
     return Node(NodeKind.IMAGE, {'address': dict(attrs)['src']}, [dict(attrs).get('alt')])
+
 
 def parse_header(tag, attrs):
     return Node(NodeKind.HEADER, {'level': int(tag[-1])}, [])
@@ -84,13 +86,17 @@ class PyrkupHtmlParser(HTMLParser):
             new = Node(tag, None, [])
         self.stack[-1].data.append(new)
         self.stack.append(new)
+
     def handle_endtag(self, tag):
         self.stack.pop()
+
     def handle_data(self, data):
         self.stack[-1].data.append(data)
+
     def handle_entityref(self, name):
         c = five.unichr(name2codepoint[name])
         self.stack[-1].data.append(c)
+
     def handle_charref(self, name):
         if name.startswith('x'):
             c = five.unichr(int(name[1:], 16))

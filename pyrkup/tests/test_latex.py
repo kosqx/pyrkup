@@ -64,6 +64,7 @@ DATA = [
     (u'foo\\\\\nbar', [u'foo', Node(NodeKind.NEWLINE), u'bar']),
 ]
 
+
 @pytest.mark.parametrize(('text', 'nodes'), DATA)
 def test_format(text, nodes):
     print(LatexMarkup().format(nodes))

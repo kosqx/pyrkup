@@ -45,6 +45,7 @@ def test_format(text, nodes):
     print(text)
     assert CreoleMarkup().format(nodes) == text
 
+
 def test_toplevel():
     assert toplevel('''
 = foo

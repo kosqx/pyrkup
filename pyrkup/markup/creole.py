@@ -114,7 +114,7 @@ class CreoleMarkup(Markup):
         NodeKind.SUBSCRIPT: (u',,', u',,'),
         NodeKind.SUPERSCRIPT: (u'^^', u'^^'),
         NodeKind.UNDERLINE: (u'__', u'__'),
-        NodeKind.STRIKETHROUGH: (u'', u''), # unsupported
+        NodeKind.STRIKETHROUGH: (u'', u''),  # unsupported
         NodeKind.NEWLINE: u'\\\\',
     }
 

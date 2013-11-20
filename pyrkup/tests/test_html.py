@@ -10,8 +10,6 @@ from pyrkup.core import Node, NodeKind
 from pyrkup.markup.html import HtmlMarkup
 
 
-
-
 def v(kind):
     return [u'foo ', Node(kind, None, [u'bar']), ' baz']
 
