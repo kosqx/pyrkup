@@ -111,3 +111,27 @@ def test_format(text, nodes):
     print(HtmlMarkup().format(nodes))
     print(text)
     assert HtmlMarkup().format(nodes) == text
+
+
+ENTITIES = [
+    (u'&lt;', u'<'),
+    (u'&gt;', u'>'),
+    (u'&amp;', u'&'),
+    (u'&nbsp;', u'\u00a0'),
+
+    (u'&#60;', u'<'),
+    (u'&#62;', u'>'),
+    (u'&#38;', u'&'),
+    (u'&#160;', u'\u00a0'),
+
+    (u'&#x3c;', u'<'),
+    (u'&#x3e;', u'>'),
+    (u'&#x26;', u'&'),
+    (u'&#xa0;', u'\u00a0'),
+]
+
+
+@pytest.mark.parametrize(('entity', 'text'), ENTITIES)
+def test_entities_parse(entity, text):
+    assert HtmlMarkup().parse(entity) == [text]
+    assert HtmlMarkup().parse(u'a' + entity + u'z') == [u'a', text, u'z']
